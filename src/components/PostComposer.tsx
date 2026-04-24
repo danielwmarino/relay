@@ -8,13 +8,19 @@ const MAX = 500
 export default function PostComposer() {
   const [content, setContent] = useState('')
   const [pending, setPending] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
   async function handleSubmit(formData: FormData) {
     setPending(true)
-    await createPost(formData)
-    setContent('')
-    formRef.current?.reset()
+    setError(null)
+    const result = await createPost(formData)
+    if (result?.error) {
+      setError(result.error)
+    } else {
+      setContent('')
+      formRef.current?.reset()
+    }
     setPending(false)
   }
 
@@ -31,6 +37,7 @@ export default function PostComposer() {
         rows={3}
         className="w-full resize-none text-sm focus:outline-none"
       />
+      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       <div className="flex items-center justify-between mt-2">
         <span className={`text-xs ${tooLong ? 'text-red-500' : 'text-gray-400'}`}>
           {remaining}
