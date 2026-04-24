@@ -110,7 +110,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
 
       <button
         type="submit"
-        className="bg-black text-white text-sm px-5 py-2 rounded"
+        className="bg-blue-500 text-white text-sm px-5 py-2 rounded border border-blue-500 hover:bg-transparent hover:text-blue-500 transition-colors"
       >
         {status === 'saving' ? 'Saving…' : status === 'saved' ? 'Saved!' : 'Save changes'}
       </button>

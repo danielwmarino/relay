@@ -52,7 +52,7 @@ export default function PostComposer() {
         <button
           type="button"
           onClick={handlePost}
-          className={`text-sm px-4 py-1.5 rounded ${pending ? 'bg-gray-400 text-white' : 'bg-black text-white'}`}
+          className={`text-sm px-4 py-1.5 rounded border transition-colors ${pending ? 'bg-gray-400 text-white border-gray-400' : 'bg-blue-500 text-white border-blue-500 hover:bg-transparent hover:text-blue-500'}`}
         >
           {pending ? 'Posting…' : 'Post'}
         </button>

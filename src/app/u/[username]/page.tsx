@@ -68,7 +68,7 @@ export default async function ProfilePage({ params }: Props) {
             {isOwnProfile ? (
               <Link
                 href="/settings"
-                className="text-sm px-4 py-1.5 rounded border border-gray-300 hover:bg-gray-50"
+                className="text-sm px-4 py-1.5 rounded bg-blue-500 text-white border border-blue-500 hover:bg-transparent hover:text-blue-500 transition-colors"
               >
                 Edit profile
               </Link>
