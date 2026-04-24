@@ -10,7 +10,12 @@ export async function updateProfile(formData: FormData) {
 
   const displayName = (formData.get('display_name') as string).trim()
   const bio = (formData.get('bio') as string).trim()
+  const newUsername = (formData.get('username') as string).trim().toLowerCase()
   const avatarFile = formData.get('avatar') as File | null
+
+  if (!newUsername || !/^[a-z0-9_]+$/.test(newUsername)) {
+    return { error: 'Username can only contain letters, numbers, and underscores' }
+  }
 
   let avatarUrl: string | undefined
 
@@ -32,7 +37,24 @@ export async function updateProfile(formData: FormData) {
     avatarUrl = `${publicUrl}?t=${Date.now()}`
   }
 
-  const updates: Record<string, string> = { display_name: displayName, bio }
+  // Check username is not taken by someone else
+  const { data: existing } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('username', newUsername)
+    .neq('id', user.id)
+    .single()
+
+  if (existing) return { error: 'Username is already taken' }
+
+  // Get old username to revalidate old profile path
+  const { data: oldProfile } = await supabase
+    .from('profiles')
+    .select('username')
+    .eq('id', user.id)
+    .single()
+
+  const updates: Record<string, string> = { display_name: displayName, bio, username: newUsername }
   if (avatarUrl) updates.avatar_url = avatarUrl
 
   const { error } = await supabase
@@ -42,14 +64,8 @@ export async function updateProfile(formData: FormData) {
 
   if (error) return { error: error.message }
 
-  // Get username to revalidate the right profile page
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('username')
-    .eq('id', user.id)
-    .single()
-
-  if (profile) revalidatePath(`/u/${profile.username}`)
+  if (oldProfile) revalidatePath(`/u/${oldProfile.username}`)
+  revalidatePath(`/u/${newUsername}`)
   revalidatePath('/settings')
 
   return { success: true }

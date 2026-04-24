@@ -79,14 +79,16 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
         />
       </div>
 
-      {/* Username (read-only) */}
+      {/* Username */}
       <div>
-        <label className="block text-sm font-medium mb-1 text-gray-400">Username</label>
+        <label className="block text-sm font-medium mb-1">Username</label>
         <input
-          value={`@${profile.username}`}
-          disabled
-          className="w-full border border-gray-100 rounded px-3 py-2 text-sm text-gray-400 bg-gray-50"
+          name="username"
+          defaultValue={profile.username}
+          maxLength={30}
+          className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-black"
         />
+        <p className="text-xs text-gray-400 mt-1">Letters, numbers, and underscores only.</p>
       </div>
 
       {status === 'error' && <p className="text-red-500 text-sm">{errorMsg}</p>}
