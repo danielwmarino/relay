@@ -3,7 +3,6 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import PostComposer from '@/components/PostComposer'
 import PostCard from '@/components/PostCard'
-import SignOutButton from '@/components/SignOutButton'
 
 export default async function FeedPage() {
   const supabase = await createClient()
@@ -60,7 +59,11 @@ export default async function FeedPage() {
               @{profile.username}
             </Link>
           )}
-          <SignOutButton />
+          <form action="/api/auth/signout" method="POST">
+              <button type="submit" className="text-sm text-gray-400 hover:text-black">
+                Sign out
+              </button>
+            </form>
         </div>
       </div>
       <PostComposer />

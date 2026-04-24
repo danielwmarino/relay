@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import EditProfileForm from './EditProfileForm'
 
 export default async function SettingsPage() {
@@ -18,7 +19,8 @@ export default async function SettingsPage() {
 
   return (
     <main className="max-w-xl mx-auto px-4 py-8">
-      <h1 className="text-xl font-bold mb-6">Edit profile</h1>
+      <Link href="/feed" className="text-sm text-gray-400 hover:text-black">← Home</Link>
+      <h1 className="text-xl font-bold mt-4 mb-6">Edit profile</h1>
       <EditProfileForm profile={profile} />
     </main>
   )
