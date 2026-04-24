@@ -1,6 +1,5 @@
 'use client'
 
-import { createPost } from '@/app/actions/posts'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -18,18 +17,21 @@ export default function PostComposer() {
     setError(null)
 
     try {
-      const formData = new FormData()
-      formData.set('content', content)
-      const result = await createPost(formData)
+      const res = await fetch('/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      })
+      const data = await res.json()
 
-      if (result?.error) {
-        setError(result.error)
+      if (!res.ok) {
+        setError(data.error ?? 'Something went wrong')
       } else {
         setContent('')
         router.refresh()
       }
-    } catch (e) {
-      setError('Something went wrong. Try again.')
+    } catch {
+      setError('Network error. Try again.')
     } finally {
       setPending(false)
     }
