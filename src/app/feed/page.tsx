@@ -89,7 +89,7 @@ export default async function FeedPage() {
           Nothing here yet — be the first to post!
         </p>
       ) : (
-        finalPosts!.map(post => <PostCard key={post.id} post={post as any} />)
+        (finalPosts as any[]).map(post => <PostCard key={post.id} post={post} />)
       )}
     </main>
   )
