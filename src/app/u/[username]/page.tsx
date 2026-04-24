@@ -50,7 +50,7 @@ export default async function ProfilePage({ params }: Props) {
   const displayName = profile.display_name || profile.username
 
   return (
-    <main className="max-w-xl mx-auto px-4 py-8">
+    <main className="max-w-[400px] mx-auto px-4 py-8">
       <div className="mb-6">
         <Link href="/feed" className="text-sm text-gray-400 hover:text-white">← Home</Link>
       </div>

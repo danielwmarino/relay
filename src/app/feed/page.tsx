@@ -56,7 +56,7 @@ export default async function FeedPage() {
   const isEmpty = !finalPosts || finalPosts.length === 0
 
   return (
-    <main className="max-w-xl mx-auto px-4 py-8">
+    <main className="max-w-[400px] mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Relay</h1>
         <div className="flex items-center gap-4">
