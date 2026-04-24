@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { revalidatePath, refresh } from 'next/cache'
+import { revalidatePath } from 'next/cache'
 
 export async function createPost(formData: FormData) {
   const content = (formData.get('content') as string)?.trim()
@@ -35,6 +35,5 @@ export async function createPost(formData: FormData) {
   if (error) return { error: error.message }
 
   revalidatePath('/feed')
-  refresh()
   return { success: true }
 }
