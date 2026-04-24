@@ -37,7 +37,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#222222' }}>
       <div className="w-full max-w-sm px-6">
         <h1 className="text-3xl font-bold mb-8">Relay</h1>
 
