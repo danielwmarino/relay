@@ -1,11 +1,13 @@
 'use client'
 
 import { createPost } from '@/app/actions/posts'
+import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 
 const MAX = 500
 
 export default function PostComposer() {
+  const router = useRouter()
   const [content, setContent] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [isPending, startTransition] = useTransition()
@@ -22,6 +24,7 @@ export default function PostComposer() {
         setError(result.error)
       } else {
         setContent('')
+        router.refresh()
       }
     })
   }
