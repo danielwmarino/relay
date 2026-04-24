@@ -1,7 +1,7 @@
 'use client'
 
 import { createPost } from '@/app/actions/posts'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
 const MAX = 500
 
@@ -9,17 +9,23 @@ export default function PostComposer() {
   const [content, setContent] = useState('')
   const [pending, setPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const formRef = useRef<HTMLFormElement>(null)
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!content.trim() || content.length > MAX) return
+
     setPending(true)
     setError(null)
+
+    const formData = new FormData()
+    formData.set('content', content)
+
     const result = await createPost(formData)
+
     if (result?.error) {
       setError(result.error)
     } else {
       setContent('')
-      formRef.current?.reset()
     }
     setPending(false)
   }
@@ -28,9 +34,8 @@ export default function PostComposer() {
   const tooLong = remaining < 0
 
   return (
-    <form ref={formRef} action={handleSubmit} className="border border-gray-200 rounded-lg p-4 mb-6">
+    <form onSubmit={handleSubmit} className="border border-gray-200 rounded-lg p-4 mb-6">
       <textarea
-        name="content"
         value={content}
         onChange={e => setContent(e.target.value)}
         placeholder="What's on your mind?"
