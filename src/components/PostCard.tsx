@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Avatar from './Avatar'
+import PostContent from './PostContent'
 
 interface Post {
   id: string
@@ -32,7 +33,7 @@ export default function PostCard({ post }: { post: Post }) {
           <span className="text-gray-400 text-xs">@{post.profiles.username}</span>
           <span className="text-gray-300 text-xs ml-auto">{date}</span>
         </div>
-        <p className="text-sm leading-relaxed">{post.content}</p>
+        <PostContent text={post.content} />
       </div>
     </div>
   )
