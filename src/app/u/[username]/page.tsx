@@ -52,7 +52,7 @@ export default async function ProfilePage({ params }: Props) {
   return (
     <main className="max-w-xl mx-auto px-4 py-8">
       <div className="mb-6">
-        <Link href="/feed" className="text-sm text-gray-400 hover:text-black">← Home</Link>
+        <Link href="/feed" className="text-sm text-gray-400 hover:text-white">← Home</Link>
       </div>
       <div className="mb-6">
         <div className="flex items-start justify-between gap-4">

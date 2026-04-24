@@ -55,7 +55,7 @@ export default async function FeedPage() {
         <h1 className="text-2xl font-bold">Relay</h1>
         <div className="flex items-center gap-4">
           {profile && (
-            <Link href={`/u/${profile.username}`} className="text-sm text-gray-500 hover:text-black">
+            <Link href={`/u/${profile.username}`} className="text-sm text-gray-500 hover:text-white">
               @{profile.username}
             </Link>
           )}

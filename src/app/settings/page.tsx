@@ -19,7 +19,7 @@ export default async function SettingsPage() {
 
   return (
     <main className="max-w-xl mx-auto px-4 py-8">
-      <Link href="/feed" className="text-sm text-gray-400 hover:text-black">← Home</Link>
+      <Link href="/feed" className="text-sm text-gray-400 hover:text-white">← Home</Link>
       <h1 className="text-xl font-bold mt-4 mb-6">Edit profile</h1>
       <EditProfileForm profile={profile} />
     </main>
