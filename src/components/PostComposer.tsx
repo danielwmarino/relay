@@ -2,7 +2,7 @@
 
 import { createPost } from '@/app/actions/posts'
 import { useRouter } from 'next/navigation'
-import { useState, useTransition } from 'react'
+import { useState } from 'react'
 
 const MAX = 500
 
@@ -10,23 +10,29 @@ export default function PostComposer() {
   const router = useRouter()
   const [content, setContent] = useState('')
   const [error, setError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
+  const [pending, setPending] = useState(false)
 
-  function handlePost() {
-    if (!content.trim() || content.length > MAX) return
+  async function handlePost() {
+    if (!content.trim() || content.length > MAX || pending) return
+    setPending(true)
     setError(null)
 
-    startTransition(async () => {
+    try {
       const formData = new FormData()
       formData.set('content', content)
       const result = await createPost(formData)
+
       if (result?.error) {
         setError(result.error)
       } else {
         setContent('')
         router.refresh()
       }
-    })
+    } catch (e) {
+      setError('Something went wrong. Try again.')
+    } finally {
+      setPending(false)
+    }
   }
 
   const remaining = MAX - content.length
@@ -49,10 +55,10 @@ export default function PostComposer() {
         <button
           type="button"
           onClick={handlePost}
-          disabled={isPending || !content.trim() || tooLong}
+          disabled={pending || !content.trim() || tooLong}
           className="bg-black text-white text-sm px-4 py-1.5 rounded disabled:opacity-40"
         >
-          {isPending ? 'Posting…' : 'Post'}
+          {pending ? 'Posting…' : 'Post'}
         </button>
       </div>
     </div>
