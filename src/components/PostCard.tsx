@@ -21,7 +21,7 @@ export default function PostCard({ post }: { post: Post }) {
   const displayName = post.profiles.display_name || post.profiles.username
 
   return (
-    <div className="border-b border-gray-100 py-4 flex gap-3">
+    <div className="border-b py-4 flex gap-3" style={{ borderColor: '#444444' }}>
       <Link href={`/u/${post.profiles.username}`} className="shrink-0">
         <Avatar url={post.profiles.avatar_url ?? null} name={displayName} size="sm" />
       </Link>
