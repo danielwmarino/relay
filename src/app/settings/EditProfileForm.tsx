@@ -1,7 +1,7 @@
 'use client'
 
-import { updateProfile } from '@/app/actions/profile'
 import Avatar from '@/components/Avatar'
+import { useRouter } from 'next/navigation'
 import { useRef, useState } from 'react'
 
 interface Profile {
@@ -12,6 +12,7 @@ interface Profile {
 }
 
 export default function EditProfileForm({ profile }: { profile: Profile }) {
+  const router = useRouter()
   const [preview, setPreview] = useState<string | null>(profile.avatar_url)
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
@@ -22,22 +23,36 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
     if (file) setPreview(URL.createObjectURL(file))
   }
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (status === 'saving') return
     setStatus('saving')
-    const result = await updateProfile(formData)
-    if (result?.error) {
-      setErrorMsg(result.error)
+
+    const formData = new FormData(formRef.current!)
+
+    const res = await fetch('/api/profile', {
+      method: 'POST',
+      body: formData,
+    }).catch(() => null)
+
+    if (!res) { setStatus('error'); setErrorMsg('Network error'); return }
+    const data = await res.json()
+
+    if (!res.ok) {
       setStatus('error')
-    } else {
-      setStatus('saved')
-      setTimeout(() => setStatus('idle'), 2000)
+      setErrorMsg(data.error ?? 'Failed to save')
+      return
     }
+
+    setStatus('saved')
+    router.refresh()
+    setTimeout(() => setStatus('idle'), 2000)
   }
 
   const displayName = profile.display_name || profile.username
 
   return (
-    <form ref={formRef} action={handleSubmit} className="space-y-5">
+    <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
       {/* Avatar picker */}
       <div className="flex items-center gap-4">
         <Avatar url={preview} name={displayName} size="lg" />
@@ -95,8 +110,7 @@ export default function EditProfileForm({ profile }: { profile: Profile }) {
 
       <button
         type="submit"
-        disabled={status === 'saving'}
-        className="bg-black text-white text-sm px-5 py-2 rounded disabled:opacity-40"
+        className="bg-black text-white text-sm px-5 py-2 rounded"
       >
         {status === 'saving' ? 'Saving…' : status === 'saved' ? 'Saved!' : 'Save changes'}
       </button>
