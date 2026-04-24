@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-const MAX = 500
+const MAX = 140
 
 export default function PostComposer() {
   const router = useRouter()
@@ -39,6 +39,7 @@ export default function PostComposer() {
       <textarea
         value={content}
         onChange={e => setContent(e.target.value)}
+        onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handlePost() } }}
         placeholder="What's on your mind?"
         rows={3}
         className="w-full resize-none text-sm focus:outline-none"
