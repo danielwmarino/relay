@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import EditProfileForm from './EditProfileForm'
+import DeleteAccountSection from './DeleteAccountSection'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,7 +26,10 @@ export default async function SettingsPage() {
     <main className="max-w-[400px] mx-auto px-4 py-8">
       <Link href="/feed" className="text-sm text-gray-400 hover:text-white">← Home</Link>
       <h1 className="text-xl font-bold mt-4 mb-6">Edit profile</h1>
-<EditProfileForm profile={profile} isAdmin={user.id === ADMIN_ID} />
+      <EditProfileForm profile={profile} isAdmin={user.id === ADMIN_ID} />
+      <div className="mt-8">
+        <DeleteAccountSection />
+      </div>
     </main>
   )
 }
