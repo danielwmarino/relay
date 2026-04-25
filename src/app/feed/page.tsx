@@ -89,7 +89,7 @@ export default async function FeedPage() {
 
       {!user && (
         <p className="text-gray-400 text-sm mb-6">
-          Simple status messaging app.<br />No photos, no videos, no links, and messages delete 24 hours after post.
+          Simple status messaging app.<br /><span style={{ fontSize: '16px' }}>No photos, no videos, no links, and messages delete 24 hours after post.</span>
         </p>
       )}
 
