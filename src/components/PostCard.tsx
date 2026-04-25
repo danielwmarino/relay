@@ -30,7 +30,7 @@ export default function PostCard({ post }: { post: Post }) {
           <span className="text-gray-400 text-xs">@{post.profiles.username}</span>
           <RelativeTime dateStr={post.created_at} />
         </div>
-        <PostContent text={post.content} alert={post.content.startsWith('💀')} />
+        <PostContent text={post.content} alert={post.content.startsWith('💀')} success={post.content.startsWith('✅')} />
       </div>
     </div>
   )
