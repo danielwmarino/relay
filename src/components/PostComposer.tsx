@@ -1,15 +1,37 @@
 'use client'
 
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 
 const MAX = 140
+
+const EMOJIS = [
+  '😀','😂','😍','🥹','😎','🤔','😅','🙏','👍','👎',
+  '❤️','🔥','✨','🎉','💯','😭','🤣','😊','😢','😡',
+  '👀','💀','🙌','🤯','😱','🥳','😴','🤝','💪','🫡',
+]
 
 export default function PostComposer() {
   const router = useRouter()
   const [content, setContent] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
+  const [showEmojis, setShowEmojis] = useState(false)
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  function insertEmoji(emoji: string) {
+    const el = textareaRef.current
+    if (!el) { setContent(c => c + emoji); return }
+    const start = el.selectionStart ?? content.length
+    const end = el.selectionEnd ?? content.length
+    const newContent = content.slice(0, start) + emoji + content.slice(end)
+    setContent(newContent)
+    setTimeout(() => {
+      el.focus()
+      el.setSelectionRange(start + emoji.length, start + emoji.length)
+    }, 0)
+    setShowEmojis(false)
+  }
 
   async function handlePost() {
     if (pending) return
@@ -37,6 +59,7 @@ export default function PostComposer() {
   return (
     <div className="border border-gray-200 rounded-lg p-4 mb-6">
       <textarea
+        ref={textareaRef}
         value={content}
         onChange={e => setContent(e.target.value)}
         onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handlePost() } }}
@@ -44,11 +67,34 @@ export default function PostComposer() {
         rows={3}
         className="w-full resize-none text-sm focus:outline-none"
       />
+      {showEmojis && (
+        <div className="grid grid-cols-10 gap-1 mb-2 p-2 border border-gray-200 rounded">
+          {EMOJIS.map(emoji => (
+            <button
+              key={emoji}
+              type="button"
+              onClick={() => insertEmoji(emoji)}
+              className="text-lg hover:scale-125 transition-transform"
+            >
+              {emoji}
+            </button>
+          ))}
+        </div>
+      )}
       {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       <div className="flex items-center justify-between mt-2">
-        <span className={`text-xs ${content.length > MAX ? 'text-red-500' : 'text-gray-400'}`}>
-          {MAX - content.length}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`text-xs ${content.length > MAX ? 'text-red-500' : 'text-gray-400'}`}>
+            {MAX - content.length}
+          </span>
+          <button
+            type="button"
+            onClick={() => setShowEmojis(s => !s)}
+            className="text-lg leading-none"
+          >
+            🙂
+          </button>
+        </div>
         <button
           type="button"
           onClick={handlePost}
