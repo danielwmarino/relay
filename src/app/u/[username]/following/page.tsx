@@ -38,7 +38,7 @@ export default async function FollowingFeedPage({ params }: Props) {
   }
 
   return (
-    <main className="max-w-[400px] mx-auto px-4 py-8">
+    <main className="w-[400px] mx-auto px-4 py-8">
       <div className="mb-6">
         <Link href={`/u/${username}`} className="text-sm text-gray-400 hover:text-white">← @{username}</Link>
       </div>
