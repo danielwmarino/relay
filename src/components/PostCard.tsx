@@ -17,6 +17,7 @@ export default function PostCard({ post }: { post: Post }) {
   const date = new Date(post.created_at).toLocaleDateString('en-US', {
     month: 'short',
     day: 'numeric',
+    timeZone: 'America/New_York',
   })
   const displayName = post.profiles.display_name || post.profiles.username
 
