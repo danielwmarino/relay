@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import EditProfileForm from './EditProfileForm'
 
+export const dynamic = 'force-dynamic'
+
 const ADMIN_ID = '321bcceb-f1c5-497b-938c-83f321b2a60a'
 
 export default async function SettingsPage() {
@@ -23,6 +25,7 @@ export default async function SettingsPage() {
     <main className="max-w-[400px] mx-auto px-4 py-8">
       <Link href="/feed" className="text-sm text-gray-400 hover:text-white">← Home</Link>
       <h1 className="text-xl font-bold mt-4 mb-6">Edit profile</h1>
+      <p className="text-xs text-gray-400 mb-4">debug: is_company={String(profile.is_company)}</p>
       <EditProfileForm profile={profile} isAdmin={user.id === ADMIN_ID} />
     </main>
   )
