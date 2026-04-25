@@ -29,7 +29,6 @@ export default function NewPostBanner({ followingIds, currentUserId }: Props) {
         (payload) => {
           const authorId = payload.new.author_id
           if (authorId === currentUserId) return
-          if (!followingIds.includes(authorId)) return
 
           setNewCount(c => c + 1)
 
