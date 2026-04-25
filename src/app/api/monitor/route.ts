@@ -67,7 +67,7 @@ export async function GET(request: Request) {
       const name = company.display_name || company.username
       await supabase.from('posts').insert({
         author_id: company.id,
-        content: `⚠️ ${name} appears to be down. We're monitoring and will update when it's back.`,
+        content: `💀🤯 ${name} site down.`,
       })
     } else if (prevStatus === 'down' && newStatus === 'up') {
       const name = company.display_name || company.username
