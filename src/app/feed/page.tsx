@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import PostComposer from '@/components/PostComposer'
-import PostCard from '@/components/PostCard'
 import NewPostBanner from '@/components/NewPostBanner'
+import InfinitePostList from '@/components/InfinitePostList'
 
 export default async function FeedPage() {
   const supabase = await createClient()
@@ -34,14 +34,14 @@ export default async function FeedPage() {
         .select('id, content, created_at, profiles!inner(username, display_name, avatar_url, is_private)')
         .eq('profiles.is_private', false)
         .order('created_at', { ascending: false })
-        .limit(50),
+        .limit(20),
       supabase
         .from('posts')
         .select('id, content, created_at, profiles!inner(username, display_name, avatar_url, is_private)')
         .eq('profiles.is_private', true)
         .in('author_id', followingIds)
         .order('created_at', { ascending: false })
-        .limit(50),
+        .limit(20),
     ])
 
     const combined = [...(publicPosts ?? []), ...(privatePosts ?? [])]
@@ -54,7 +54,7 @@ export default async function FeedPage() {
       .select('id, content, created_at, profiles!inner(username, display_name, avatar_url, is_private)')
       .eq('profiles.is_private', false)
       .order('created_at', { ascending: false })
-      .limit(50)
+      .limit(20)
     finalPosts = posts
   }
 
@@ -98,13 +98,7 @@ export default async function FeedPage() {
       )}
       {user && <PostComposer />}
 
-      {isEmpty ? (
-        <p className="text-gray-400 text-sm text-center py-12">
-          Nothing here yet — be the first to post!
-        </p>
-      ) : (
-        (finalPosts as any[]).map(post => <PostCard key={post.id} post={post} />)
-      )}
+      <InfinitePostList initialPosts={(finalPosts ?? []) as any[]} />
     </main>
   )
 }
