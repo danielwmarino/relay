@@ -28,7 +28,7 @@ export async function proxy(request: NextRequest) {
 
   // Redirect unauthenticated users away from protected routes
   const isAuthRoute = request.nextUrl.pathname.startsWith('/auth')
-  const isPublic = isAuthRoute || request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/feed'
+  const isPublic = isAuthRoute || request.nextUrl.pathname === '/' || request.nextUrl.pathname === '/feed' || request.nextUrl.pathname.startsWith('/u/')
   const isProtected = !isPublic
 
   if (isProtected && !user) {

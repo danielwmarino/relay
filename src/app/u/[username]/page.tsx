@@ -85,8 +85,12 @@ export default async function ProfilePage({ params }: Props) {
         {profile.bio && <p className="mt-4 text-sm">{profile.bio}</p>}
 
         <div className="flex gap-4 mt-3 text-sm text-gray-500">
-          <span><strong className="text-white">{followerCount ?? 0}</strong> followers</span>
-          <span><strong className="text-white">{followingCount ?? 0}</strong> following</span>
+          <Link href={`/u/${profile.username}/followers`} className="hover:text-white">
+            <strong className="text-white">{followerCount ?? 0}</strong> followers
+          </Link>
+          <Link href={`/u/${profile.username}/following`} className="hover:text-white">
+            <strong className="text-white">{followingCount ?? 0}</strong> following
+          </Link>
           <span><strong className="text-white">{posts?.length ?? 0}</strong> posts</span>
         </div>
       </div>
