@@ -44,8 +44,16 @@ export async function POST(request: Request) {
     avatarUrl = `${publicUrl}?t=${Date.now()}`
   }
 
-  const updates: Record<string, string> = { display_name: displayName, bio, username: newUsername }
+  const updates: Record<string, string | number> = { display_name: displayName, bio, username: newUsername }
   if (avatarUrl) updates.avatar_url = avatarUrl
+
+  const monitorUrl = (formData.get('monitor_url') as string ?? '').trim()
+  if (monitorUrl) updates.monitor_url = monitorUrl
+
+  const checkInterval = formData.get('check_interval_minutes')
+  const downInterval = formData.get('down_check_interval_minutes')
+  if (checkInterval) updates.check_interval_minutes = parseInt(checkInterval as string)
+  if (downInterval) updates.down_check_interval_minutes = parseInt(downInterval as string)
 
   const { error } = await supabase
     .from('profiles')
