@@ -15,7 +15,7 @@ export default function NewPostBanner({ followingIds, currentUserId }: Props) {
   const channelRef = useRef<ReturnType<ReturnType<typeof createClient>['channel']> | null>(null)
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && Notification.permission === 'default') {
+    if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission()
     }
 
@@ -33,7 +33,7 @@ export default function NewPostBanner({ followingIds, currentUserId }: Props) {
 
           setNewCount(c => c + 1)
 
-          if (Notification.permission === 'granted') {
+          if ('Notification' in window && Notification.permission === 'granted') {
             new Notification('Relay', { body: 'New post in your feed' })
           }
         }
