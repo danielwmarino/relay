@@ -15,9 +15,11 @@ interface Profile {
   check_interval_minutes: number | null
   down_check_interval_minutes: number | null
   post_delete_hours: number | null
+  is_private: boolean | null
 }
 
 export default function EditProfileForm({ profile, isAdmin }: { profile: Profile; isAdmin: boolean }) {
+  const [isPrivate, setIsPrivate] = useState(profile.is_private ?? false)
   const router = useRouter()
   const [preview, setPreview] = useState<string | null>(profile.avatar_url)
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle')
@@ -189,6 +191,22 @@ export default function EditProfileForm({ profile, isAdmin }: { profile: Profile
           </div>
         </div>
       )}
+
+      {/* Privacy toggle */}
+      <div className="flex items-center justify-between border-t border-gray-200 pt-5">
+        <div>
+          <p className="text-sm font-medium">Private account</p>
+          <p className="text-xs text-gray-400 mt-0.5">Only people you follow can see your posts</p>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsPrivate(p => !p)}
+          className={`w-11 h-6 rounded-full transition-colors ${isPrivate ? 'bg-blue-500' : 'bg-gray-300'}`}
+        >
+          <span className={`block w-4 h-4 bg-white rounded-full mx-1 transition-transform ${isPrivate ? 'translate-x-5' : 'translate-x-0'}`} />
+        </button>
+        <input type="hidden" name="is_private" value={isPrivate ? 'true' : 'false'} />
+      </div>
 
       {status === 'error' && <p className="text-red-500 text-sm">{errorMsg}</p>}
 

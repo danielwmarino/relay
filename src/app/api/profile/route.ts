@@ -50,6 +50,9 @@ export async function POST(request: Request) {
   const monitorUrl = (formData.get('monitor_url') as string ?? '').trim()
   if (monitorUrl) updates.monitor_url = monitorUrl
 
+  const isPrivate = formData.get('is_private')
+  if (isPrivate !== null) updates.is_private = isPrivate === 'true'
+
   const checkInterval = formData.get('check_interval_minutes')
   const downInterval = formData.get('down_check_interval_minutes')
   const postDeleteHours = formData.get('post_delete_hours')

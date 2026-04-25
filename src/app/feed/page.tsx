@@ -27,17 +27,32 @@ export default async function FeedPage() {
 
     followingIds = [user.id, ...(follows ?? []).map(f => f.following_id)]
 
-    const { data: posts } = await supabase
-      .from('posts')
-      .select('id, content, created_at, profiles(username, display_name, avatar_url)')
-      .order('created_at', { ascending: false })
-      .limit(50)
+    // Public posts + posts from private accounts the user follows
+    const [{ data: publicPosts }, { data: privatePosts }] = await Promise.all([
+      supabase
+        .from('posts')
+        .select('id, content, created_at, profiles!inner(username, display_name, avatar_url, is_private)')
+        .eq('profiles.is_private', false)
+        .order('created_at', { ascending: false })
+        .limit(50),
+      supabase
+        .from('posts')
+        .select('id, content, created_at, profiles!inner(username, display_name, avatar_url, is_private)')
+        .eq('profiles.is_private', true)
+        .in('author_id', followingIds)
+        .order('created_at', { ascending: false })
+        .limit(50),
+    ])
 
-    finalPosts = posts
+    const combined = [...(publicPosts ?? []), ...(privatePosts ?? [])]
+    combined.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    finalPosts = combined.slice(0, 50)
   } else {
+    // Logged out: public posts only
     const { data: posts } = await supabase
       .from('posts')
-      .select('id, content, created_at, profiles(username, display_name, avatar_url)')
+      .select('id, content, created_at, profiles!inner(username, display_name, avatar_url, is_private)')
+      .eq('profiles.is_private', false)
       .order('created_at', { ascending: false })
       .limit(50)
     finalPosts = posts

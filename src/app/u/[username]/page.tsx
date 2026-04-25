@@ -17,7 +17,7 @@ export default async function ProfilePage({ params }: Props) {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id, username, display_name, bio, avatar_url, created_at')
+    .select('id, username, display_name, bio, avatar_url, created_at, is_private')
     .eq('username', username)
     .single()
 
@@ -48,6 +48,7 @@ export default async function ProfilePage({ params }: Props) {
 
   const isOwnProfile = currentUser?.id === profile.id
   const displayName = profile.display_name || profile.username
+  const canSeePosts = isOwnProfile || !profile.is_private || isFollowing
 
   return (
     <main className="max-w-[400px] mx-auto px-4 py-8">
@@ -96,7 +97,9 @@ export default async function ProfilePage({ params }: Props) {
       </div>
 
       <div className="border-t border-gray-100">
-        {posts && posts.length > 0 ? (
+        {!canSeePosts ? (
+          <p className="text-gray-400 text-sm text-center py-12">This account is private.</p>
+        ) : posts && posts.length > 0 ? (
           posts.map(post => <PostCard key={post.id} post={post as any} />)
         ) : (
           <p className="text-gray-400 text-sm text-center py-12">No posts yet.</p>
