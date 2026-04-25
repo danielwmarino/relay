@@ -3,6 +3,7 @@ import Link from 'next/link'
 import PostComposer from '@/components/PostComposer'
 import NewPostBanner from '@/components/NewPostBanner'
 import InfinitePostList from '@/components/InfinitePostList'
+import PullToRefresh from '@/components/PullToRefresh'
 
 export default async function FeedPage() {
   const supabase = await createClient()
@@ -98,7 +99,9 @@ export default async function FeedPage() {
       )}
       {user && <PostComposer />}
 
-      <InfinitePostList initialPosts={(finalPosts ?? []) as any[]} />
+      <PullToRefresh>
+        <InfinitePostList initialPosts={(finalPosts ?? []) as any[]} />
+      </PullToRefresh>
     </main>
   )
 }
