@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     avatarUrl = `${publicUrl}?t=${Date.now()}`
   }
 
-  const updates: Record<string, string | number> = { display_name: displayName, bio, username: newUsername }
+  const updates: Record<string, string | number | boolean> = { display_name: displayName, bio, username: newUsername }
   if (avatarUrl) updates.avatar_url = avatarUrl
 
   const monitorUrl = (formData.get('monitor_url') as string ?? '').trim()
