@@ -8,12 +8,14 @@ export default function SignupPage() {
   const supabase = createClient()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [honeypot, setHoneypot] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [done, setDone] = useState(false)
 
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
+    if (honeypot) return
     setLoading(true)
     setError(null)
     const { error } = await supabase.auth.signUp({
@@ -56,6 +58,16 @@ export default function SignupPage() {
         <h1 className="text-3xl font-bold mb-8 text-white">Relay</h1>
 
         <form onSubmit={handleSignup} className="space-y-4">
+          {/* Honeypot — hidden from real users, bots fill it in */}
+          <input
+            type="text"
+            value={honeypot}
+            onChange={e => setHoneypot(e.target.value)}
+            style={{ display: 'none' }}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
           <input
             type="email"
             placeholder="Email"
