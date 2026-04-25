@@ -94,7 +94,7 @@ export default async function FeedPage() {
       )}
 
       {user && (
-        <NewPostBanner followingIds={followingIds} currentUserId={user.id} />
+        <NewPostBanner currentUserId={user.id} newestPostTime={finalPosts?.[0]?.created_at ?? new Date().toISOString()} />
       )}
       {user && <PostComposer />}
 
