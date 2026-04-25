@@ -82,6 +82,12 @@ export default async function FeedPage() {
         </div>
       </div>
 
+      {!user && (
+        <p className="text-gray-400 text-sm mb-6">
+          Simple status messaging app. No photos, no videos, no links, and messages delete 36 hours after post.
+        </p>
+      )}
+
       {user && <PostComposer />}
 
       {isEmpty ? (
