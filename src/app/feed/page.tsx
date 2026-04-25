@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import PostComposer from '@/components/PostComposer'
 import PostCard from '@/components/PostCard'
+import NewPostBanner from '@/components/NewPostBanner'
 
 export default async function FeedPage() {
   const supabase = await createClient()
@@ -9,6 +10,7 @@ export default async function FeedPage() {
 
   let profile = null
   let finalPosts = null
+  let followingIds: string[] = []
 
   if (user) {
     const { data: p } = await supabase
@@ -23,7 +25,7 @@ export default async function FeedPage() {
       .select('following_id')
       .eq('follower_id', user.id)
 
-    const followingIds = [user.id, ...(follows ?? []).map(f => f.following_id)]
+    followingIds = [user.id, ...(follows ?? []).map(f => f.following_id)]
 
     const { data: posts, error: postsError } = await supabase
       .from('posts')
@@ -44,7 +46,6 @@ export default async function FeedPage() {
       finalPosts = posts
     }
   } else {
-    // Logged out: show all recent posts
     const { data: posts } = await supabase
       .from('posts')
       .select('id, content, created_at, profiles(username, display_name, avatar_url)')
@@ -88,6 +89,9 @@ export default async function FeedPage() {
         </p>
       )}
 
+      {user && (
+        <NewPostBanner followingIds={followingIds} currentUserId={user.id} />
+      )}
       {user && <PostComposer />}
 
       {isEmpty ? (
