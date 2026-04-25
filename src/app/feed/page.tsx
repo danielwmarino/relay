@@ -27,24 +27,13 @@ export default async function FeedPage() {
 
     followingIds = [user.id, ...(follows ?? []).map(f => f.following_id)]
 
-    const { data: posts, error: postsError } = await supabase
+    const { data: posts } = await supabase
       .from('posts')
       .select('id, content, created_at, profiles(username, display_name, avatar_url)')
-      .in('author_id', followingIds)
       .order('created_at', { ascending: false })
       .limit(50)
 
-    if (postsError?.code === '42703') {
-      const { data: fallbackPosts } = await supabase
-        .from('posts')
-        .select('id, content, created_at, profiles(username, display_name)')
-        .in('author_id', followingIds)
-        .order('created_at', { ascending: false })
-        .limit(50)
-      finalPosts = fallbackPosts as any
-    } else {
-      finalPosts = posts
-    }
+    finalPosts = posts
   } else {
     const { data: posts } = await supabase
       .from('posts')
