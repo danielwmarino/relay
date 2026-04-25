@@ -14,6 +14,7 @@ interface Profile {
   monitor_url: string | null
   check_interval_minutes: number | null
   down_check_interval_minutes: number | null
+  post_delete_hours: number | null
 }
 
 export default function EditProfileForm({ profile, isAdmin }: { profile: Profile; isAdmin: boolean }) {
@@ -173,6 +174,18 @@ export default function EditProfileForm({ profile, isAdmin }: { profile: Profile
               min={1}
               className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-black"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Delete posts after (hours)</label>
+            <input
+              type="number"
+              name="post_delete_hours"
+              defaultValue={profile.post_delete_hours ?? 36}
+              min={1}
+              max={36}
+              className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-black"
+            />
+            <p className="text-xs text-gray-400 mt-1">Between 1 and 36 hours.</p>
           </div>
         </div>
       )}

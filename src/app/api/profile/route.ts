@@ -52,8 +52,13 @@ export async function POST(request: Request) {
 
   const checkInterval = formData.get('check_interval_minutes')
   const downInterval = formData.get('down_check_interval_minutes')
+  const postDeleteHours = formData.get('post_delete_hours')
   if (checkInterval) updates.check_interval_minutes = parseInt(checkInterval as string)
   if (downInterval) updates.down_check_interval_minutes = parseInt(downInterval as string)
+  if (postDeleteHours) {
+    const hours = Math.min(36, Math.max(1, parseInt(postDeleteHours as string)))
+    updates.post_delete_hours = hours
+  }
 
   const { error } = await supabase
     .from('profiles')
