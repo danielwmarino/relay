@@ -15,7 +15,7 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#222222' }}>
-      <div className="w-full max-w-sm px-6">
+      <div className="w-full max-w-[400px] px-6">
         <h1 className="text-3xl font-bold mb-8 text-white">Relay</h1>
 
         <button

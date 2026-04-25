@@ -3,7 +3,7 @@ import Link from 'next/link'
 export default function Home() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-white">
-      <div className="text-center">
+      <div className="w-full max-w-[400px] px-4 text-center">
         <h1 className="text-5xl font-bold mb-4">Relay</h1>
         <p className="text-gray-500 mb-8">Text-only social. Short thoughts, fast.</p>
         <div className="flex gap-3 justify-center">
