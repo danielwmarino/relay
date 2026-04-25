@@ -16,11 +16,6 @@ export const metadata: Metadata = {
   title: "Relay",
   description: "Text-only social. Short thoughts, fast.",
   manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "black-translucent",
-    title: "Relay",
-  },
 };
 
 export default function RootLayout({
@@ -33,6 +28,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Relay" />
+        <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
