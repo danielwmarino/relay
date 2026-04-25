@@ -14,6 +14,11 @@ export default function NewPostBanner({ currentUserId, newestPostTime }: Props) 
   const newestRef = useRef(newestPostTime)
 
   useEffect(() => {
+    newestRef.current = newestPostTime
+    setHasNew(false)
+  }, [newestPostTime])
+
+  useEffect(() => {
     if (typeof window !== 'undefined' && 'Notification' in window && Notification.permission === 'default') {
       Notification.requestPermission()
     }
